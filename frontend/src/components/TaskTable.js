@@ -9,12 +9,14 @@ import {
   IconButton,
   Tooltip,
   Typography,
-  
 } from "@mui/material";
 import { CheckCircle, Edit, Delete } from "@mui/icons-material";
 import { motion } from "framer-motion";
 
 const TaskTable = ({ tasks, onEdit, onDelete, onMarkCompleted }) => {
+  // Ensure tasks is an array before trying to map over it
+  const safeTasks = Array.isArray(tasks) ? tasks : [];
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -37,7 +39,7 @@ const TaskTable = ({ tasks, onEdit, onDelete, onMarkCompleted }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tasks.map((task) => (
+            {safeTasks.map((task) => (
               <TableRow
                 key={task._id}
                 style={{
@@ -73,7 +75,6 @@ const TaskTable = ({ tasks, onEdit, onDelete, onMarkCompleted }) => {
             ))}
           </TableBody>
         </Table>
-        
       </TableContainer>
     </motion.div>
   );
