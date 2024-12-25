@@ -24,24 +24,28 @@ const TaskList = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Fetch tasks from API on initial load
   useEffect(() => {
     const getTasks = async () => {
       const tasksData = await fetchTasks();
+      console.log("Fetched tasks:", tasksData); // Log the fetched data to check structure
       setTasks(tasksData);
       setFilteredTasks(tasksData);
     };
     getTasks();
   }, []);
 
+  // Apply filters and search query
   useEffect(() => {
     const filtered = tasks.filter((task) =>
       (statusFilter === "All" || task.status === statusFilter) &&
-      (task.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        task.description.toLowerCase().includes(searchQuery.toLowerCase()))
+      (task.name && task.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase()))
     );
     setFilteredTasks(filtered);
   }, [statusFilter, searchQuery, tasks]);
 
+  // Handle add or edit task
   const handleAddOrEditTask = async (taskData) => {
     if (taskData._id) {
       const updatedTask = await updateTask(taskData._id, taskData);
@@ -56,6 +60,7 @@ const TaskList = () => {
     setSelectedTask(null);
   };
 
+  // Handle delete task
   const handleDeleteTask = async () => {
     await deleteTask(deleteTaskId);
     setTasks((prev) => prev.filter((task) => task._id !== deleteTaskId));
@@ -106,7 +111,9 @@ const TaskList = () => {
                 setDeleteTaskId(id);
                 setIsDeleteDialogOpen(true);
               }}
-              onMarkCompleted={(id) => handleAddOrEditTask({ _id: id, status: "Completed" })}
+              onMarkCompleted={(id) =>
+                handleAddOrEditTask({ _id: id, status: "Completed" })
+              }
             />
           </Grid>
         </Grid>
