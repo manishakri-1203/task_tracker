@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5000/api/tasks";
+// Use the environment variable for the backend URL, fallback to localhost for local development
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000/api/tasks";
 
 export const fetchTasks = async () => {
   const response = await axios.get(API_BASE_URL);
